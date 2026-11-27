@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impostazioni</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #2196F3, #673AB7);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+
+
+        #app {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+        }
+
+
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+
+
+        h2 {
+            text-align: center;
+            color: #444;
+        }
+
+
+
+
+
+        .row {
+            margin-bottom: 15px;
+        }
+
+
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+
+
+
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 18px;
+            outline: none;
+        }
+
+
+
+            input:focus,
+            textarea:focus {
+                border-color: #2196F3;
+            }
+
+
+
+
+
+        textarea {
+            height: 130px;
+            resize: none;
+        }
+
+
+
+
+
+        button {
+            width: 100%;
+            padding: 16px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 12px;
+            background: #2196F3;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+
+
+            button:hover {
+                background: #1976D2;
+                transform: scale(1.02);
+            }
+
+
+
+            button:active {
+                transform: scale(.98);
+            }
+
+
+
+
+
+
+
+        /* --------------------
+           CARTA RUOLO
+        -------------------- */
+
+
+        .card {
+            width: 100%;
+            height: 320px;
+            margin: 20px 0;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+
+
+        .faccia {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            padding: 20px;
+            backface-visibility: hidden;
+        }
+
+
+
+        .card {
+            position: relative;
+        }
+
+
+
+        .card {
+            transform-style: preserve-3d;
+        }
+
+
+
+        .davanti {
+            background: #333;
+            color: white;
+        }
+
+
+
+        .dietro {
+            background: #4CAF50;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+
+
+        .card.girata .davanti {
+            transform: rotateY(180deg);
+        }
+
+
+
+        .card.girata .dietro {
+            transform: rotateY(0deg);
+        }
+
+
+
+        .faccia {
+            transition: .7s;
+        }
+
+
+
+
+
+
+
+
+        /* --------------------
+           PASSAGGIO TELEFONO
+        -------------------- */
+
+
+        .passaggio {
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #2196F3;
+        }
+
+
+
+
+
+
+
+        /* --------------------
+           RIEPILOGO FRASI
+        -------------------- */
+
+
+        #listaFrasi {
+            margin-top: 20px;
+        }
+
+
+
+        .frase,
+        .box {
+            background: #eeeeee;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+
+
+
+
+
+
+        /* --------------------
+           RISULTATO
+        -------------------- */
+
+
+        #titoloRisultato {
+            font-size: 35px;
+        }
+
+
+
+        #listaImpostori {
+            margin-top: 20px;
+        }
+
+
+
+
+
+
+
+        /* --------------------
+           MOBILE
+        -------------------- */
+
+
+        @media(max-width:400px) {
+
+            #app {
+                padding: 18px;
+            }
+
+
+            h1 {
+                font-size: 28px;
+            }
+
+
+            .card {
+                height: 260px;
+            }
+
+
+            .faccia {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <div id="app">
+
+
+        <!-- SCHERMATA IMPOSTAZIONI -->
+
+        <section id="schermataImpostazioni">
+
+            <h1>🎭 Impostore</h1>
+
+
+            <div class="row">
+                <label>Numero giocatori</label>
+                <input id="numeroGiocatori"
+                       type="number"
+                       value="4"
+                       min="4">
+            </div>
+
+
+            <div id="listaGiocatori">
+
+
+                <!-- generati automaticamente -->
+
+                <div class="row">
+                    <label>Il mio nome</label>
+                    <input class="nomeGiocatore" type="text">
+                </div>
+
+
+                <div class="row">
+                    <label>Nome avversario 1</label>
+                    <input class="nomeGiocatore" type="text">
+                </div>
+
+
+                <div class="row">
+                    <label>Nome avversario 2</label>
+                    <input class="nomeGiocatore" type="text">
+                </div>
+
+
+                <div class="row">
+                    <label>Nome avversario 3</label>
+                    <input class="nomeGiocatore" type="text">
+                </div>
+
+
+            </div>
+
+
+
+            <div class="row">
+                <label>Numero impostori</label>
+                <input id="numeroImpostori" type="number" value="1">
+            </div>
+
+
+
+            <div class="row">
+                <label>Numero minimo</label>
+                <input id="numeroMinimo" type="number" value="1">
+            </div>
+
+
+
+            <div class="row">
+                <label>Numero massimo</label>
+                <input id="numeroMassimo" type="number" value="100">
+            </div>
+
+
+
+            <div class="row">
+
+                <label>Parola segreta</label>
+
+                <input id="parolaSegreta"
+                       type="text">
+
+            </div>
+
+
+
+            <button id="avviaGioco">
+                AVVIA
+            </button>
+
+
+        </section>
+
+
+
+
+
+        <!-- SCHERMATA CARTA -->
+
+        <section id="schermataCarta" hidden>
+
+
+            <h1>Il tuo ruolo</h1>
+
+
+            <div id="carta"
+                 class="card">
+
+
+                <div class="faccia davanti">
+
+                    Tocca per scoprire
+
+                </div>
+
+
+                <div class="faccia dietro">
+
+                    <span id="ruoloGiocatore"></span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <button id="continuaCarta">
+
+                Continua
+
+            </button>
+
+
+        </section>
+
+
+
+
+
+
+
+        <!-- PASSAGGIO TELEFONO -->
+
+
+        <section id="schermataPassaggio" hidden>
+
+
+            <h1>
+
+                Passa il telefono
+
+            </h1>
+
+
+            <div class="passaggio">
+
+                <span id="nomeTurno"></span>
+
+            </div>
+
+
+
+            <button id="iniziaTurno">
+
+                Pronto
+
+            </button>
+
+
+        </section>
+
+
+
+
+
+
+
+
+
+        <!-- INSERIMENTO FRASE -->
+
+
+        <section id="schermataFrase" hidden>
+
+
+            <h1>
+
+                Scrivi una frase
+
+            </h1>
+
+
+<textarea id="testoFrase"
+          placeholder="Fai capire il numero senza dirlo">
+
+</textarea>
+
+
+
+            <button id="salvaFrase">
+
+                Conferma
+
+            </button>
+
+
+        </section>
+
+
+
+
+
+
+
+        <!-- RIEPILOGO -->
+
+
+        <section id="schermataRiepilogo" hidden>
+
+
+            <h1>
+
+                Riepilogo
+
+            </h1>
+
+
+            <div id="listaFrasi">
+
+
+            </div>
+
+
+
+            <h2>
+
+                Che numero è?
+
+            </h2>
+
+
+            <input id="tentativoNumero"
+                   type="number">
+
+
+
+            <button id="indovina">
+
+                Indovina
+
+            </button>
+
+
+        </section>
+
+
+
+
+
+
+
+        <!-- RISULTATO -->
+
+
+        <section id="schermataRisultato" hidden>
+
+
+            <h1 id="titoloRisultato">
+            </h1>
+
+
+
+            <h2>
+
+                Numero corretto:
+
+                <span id="numeroCorretto"></span>
+
+            </h2>
+
+
+
+            <h2>
+
+                Impostori:
+
+            </h2>
+
+
+
+            <div id="listaImpostori">
+
+            </div>
+
+
+
+            <button id="rigioca">
+
+                RIGIOCA
+
+            </button>
+
+
+
+        </section>
+
+
+
+    </div>
+
+
+    <div class="form-group" id="contenitorenumero" hidden>
+
+        <button id="btnMostraNumero" type="button" class="bottoneGrande">
+            MOSTRA IL NUMERO
+        </button>
+
+
+
+    </div>
+    <div class="form-group" id="contenitoreIndovinareimpostore" hidden>
+        <label id="lblimpostori" for="impostori">Selezionare Impostore</label>
+        <select id="indovinareimpostore"></select>
+        <button id="confermaimpostore" type="button">Conferma Impostore</button>
+
+
+        <input type="text" id="indovinaregiocatore" name="indovinaregiocatore"
+               oninput="this.value=this.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase()"
+               hidden>
+        <button id="confermagiocatore" type="button" hidden>Conferma Giocatore</button>
+
+    </div>
+    <div class="form-group" id="contenitorenuovoround" hidden>
+
+        <button id="nuovoround" type="button">Inizia nuovo round</button>
+        <button id="finepartita" type="button">Fine Partita</button>
+
+
+
+    </div>
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+<script>
+    // ================================
+    // ELEMENTI HTML
+    // ================================
+
+    const schermataImpostazioni = document.getElementById("schermataImpostazioni");
+    const schermataCarta = document.getElementById("schermataCarta");
+    const schermataPassaggio = document.getElementById("schermataPassaggio");
+    const schermataFrase = document.getElementById("schermataFrase");
+    const schermataRiepilogo = document.getElementById("schermataRiepilogo");
+    const schermataRisultato = document.getElementById("schermataRisultato");
+
+    const numeroGiocatoriInput = document.getElementById("numeroGiocatori");
+    const listaGiocatori = document.getElementById("listaGiocatori");
+
+    const avviaGioco = document.getElementById("avviaGioco");
+
+    const carta = document.getElementById("carta");
+    const ruoloGiocatore = document.getElementById("ruoloGiocatore");
+
+    const numeroImpostoriInput = document.getElementById("numeroImpostori");
+    const numeroMinimoInput = document.getElementById("numeroMinimo");
+    const numeroMassimoInput = document.getElementById("numeroMassimo");
+    const parolaSegretaInput = document.getElementById("parolaSegreta");
+
+
+
+
+    // ================================
+    // PARTITA
+    // ================================
+
+
+    let partita = {
+
+        giocatori: [],
+
+        mioNome: "",
+
+
+        // QUI SONO I TELEFONI
+        telefoni: [],
+
+
+        impostori: [],
+
+
+        parola: "",
+
+
+        minimo: 1,
+
+        massimo: 100,
+
+
+        // quale telefono sta facendo il giro
+        telefonoCorrente: 0,
+
+
+        // quale persona sta guardando quel telefono
+        personaCorrente: 0,
+
+
+        frasi: []
+
+    };
+
+
+
+
+
+
+    // ================================
+    // CAMBIO SCHERMATA
+    // ================================
+
+    function mostraSchermata(schermata) {
+
+
+        [
+            schermataImpostazioni,
+            schermataCarta,
+            schermataPassaggio,
+            schermataFrase,
+            schermataRiepilogo,
+            schermataRisultato
+
+        ].forEach(s => {
+
+            s.hidden = true;
+
+        });
+
+
+        schermata.hidden = false;
+
+    }
+
+
+
+
+
+
+
+    // ================================
+    // CREA CAMPI NOMI
+    // ================================
+
+    numeroGiocatoriInput.onchange = function () {
+
+
+        listaGiocatori.innerHTML = "";
+
+
+        let n =
+            Number(this.value);
+
+
+
+        for (let i = 0; i < n; i++) {
+
+
+            let div = document.createElement("div");
+
+            div.className = "row";
+
+
+            div.innerHTML = `
+
+        <label>
+        ${i === 0
+                    ?
+                    "Il mio nome"
+                    :
+                    "Nome giocatore " + i
+                }
+        </label>
+
+        <input class="nomeGiocatore">
+
+        `;
+
+
+            listaGiocatori.appendChild(div);
+
+
+        }
+
+
+    };
+
+
+
+
+
+
+
+
+    // ================================
+    // RANDOM DETERMINISTICO
+    // ================================
+
+
+    function randomSeme(seme) {
+
+
+        let x = 0;
+
+
+        for (let i = 0; i < seme.length; i++) {
+
+            x =
+                (
+                    x * 31 +
+                    seme.charCodeAt(i)
+                )
+                %
+                2147483647;
+
+        }
+
+
+
+        return function () {
+
+
+            x =
+                (
+                    x * 16807
+                )
+                %
+                2147483647;
+
+
+
+            return x / 2147483647;
+
+
+        };
+
+
+    }
+
+
+
+
+
+
+
+
+
+    // ================================
+    // AVVIA
+    // ================================
+
+    avviaGioco.onclick = function () {
+
+
+
+        let nomi = [];
+
+
+        let inputs =
+            document.querySelectorAll(".nomeGiocatore");
+
+
+
+        for (let i = 0; i < inputs.length; i++) {
+
+
+            let nome =
+                inputs[i].value
+                    .trim()
+                    .toUpperCase();
+
+
+
+            if (nome === "") {
+
+                alert(
+                    "Inserisci tutti i nomi"
+                );
+
+                return;
+
+            }
+
+
+
+            if (i === 0) {
+
+                partita.mioNome = nome;
+
+            }
+
+
+
+            nomi.push(nome);
+
+
+        }
+
+
+
+
+        if (nomi.length < 3) {
+
+            alert(
+                "Servono almeno 3 giocatori"
+            );
+
+            return;
+
+        }
+
+
+
+
+
+
+        partita.giocatori =
+            nomi;
+
+
+
+        partita.parola =
+            parolaSegretaInput.value
+                .trim()
+                .toUpperCase();
+
+
+
+        partita.minimo =
+            Number(numeroMinimoInput.value);
+
+
+        partita.massimo =
+            Number(numeroMassimoInput.value);
+
+
+
+
+
+
+        creaTelefoni();
+
+
+        creaImpostori();
+
+
+
+
+        mostraSchermata(
+            schermataCarta
+        );
+
+
+    };
+
+
+
+
+
+
+
+
+    // ================================
+    // CREA TELEFONI
+    // ================================
+
+
+    function creaTelefoni() {
+
+
+
+        let random =
+            randomSeme(
+
+                partita.parola
+                +
+                "|TELEFONI|"
+                +
+                partita.giocatori.join("|")
+
+            );
+
+
+
+        let usati = [];
+
+
+
+        partita.telefoni = [];
+
+
+
+        partita.giocatori.forEach(nome => {
+
+
+            let numero;
+
+
+
+            do {
+
+
+                numero =
+                    Math.floor(
+                        random()
+                        *
+                        (
+                            partita.massimo
+                            -
+                            partita.minimo
+                            +
+                            1
+                        )
+                    )
+                    +
+                    partita.minimo;
+
+
+
+            } while (
+                usati.includes(numero)
+            );
+
+
+
+            usati.push(numero);
+
+
+
+            partita.telefoni.push({
+
+                proprietario: nome,
+
+                numero: numero,
+
+                indizi: []
+
+            });
+
+
+
+        });
+
+
+    }
+
+
+
+
+
+
+
+
+
+    // ================================
+    // CREA IMPOSTORI
+    // ================================
+
+    function creaImpostori() {
+
+
+
+        let random =
+            randomSeme(
+
+                partita.parola
+                +
+                "|IMPOSTORI|"
+                +
+                partita.giocatori.join("|")
+
+            );
+
+
+
+        let copia =
+            [...partita.giocatori];
+
+
+
+        copia.sort(
+            () => random() - 0.5
+        );
+
+
+
+        partita.impostori =
+            copia.slice(
+                0,
+                Number(numeroImpostoriInput.value)
+            );
+
+
+    }
+    // ======================================
+    // CARTA RUOLO DEL PROPRIETARIO
+    // ======================================
+
+    carta.onclick = function () {
+
+
+        carta.classList.add("girata");
+
+
+
+        if (
+            partita.impostori.includes(
+                partita.mioNome
+            )
+        ) {
+
+            ruoloGiocatore.innerHTML =
+                "SEI IMPOSTORE";
+
+
+        } else {
+
+
+            ruoloGiocatore.innerHTML =
+                "NON SEI IMPOSTORE";
+
+
+        }
+
+
+    };
+
+
+
+
+
+
+
+
+
+    // ======================================
+    // DOPO IL RUOLO
+    // PARTE IL PRIMO TELEFONO
+    // ======================================
+
+
+    document
+        .getElementById("continuaCarta")
+        .onclick = function () {
+
+
+            // parte dal telefono del primo giocatore
+
+            partita.telefonoCorrente = 0;
+
+
+            // il proprietario NON deve vedere il numero
+
+            partita.personaCorrente = 1;
+
+
+            avviaGiroTelefono();
+
+
+        };
+
+
+
+
+
+
+
+
+    // ======================================
+    // AVVIA GIRO TELEFONO
+    // ======================================
+
+
+    function avviaGiroTelefono() {
+
+
+
+        let telefono =
+
+            partita.telefoni[
+            partita.telefonoCorrente
+            ];
+
+
+
+
+        /*
+           Se tutti gli altri giocatori
+           hanno lasciato un indizio,
+           torna al proprietario
+        */
+
+
+        if (
+            partita.personaCorrente >=
+            partita.giocatori.length
+        ) {
+
+
+            chiediNumeroProprietario();
+
+
+            return;
+
+        }
+
+
+
+
+
+
+        mostraSchermata(
+            schermataPassaggio
+        );
+
+
+
+        document.getElementById(
+            "nomeTurno"
+        ).innerHTML =
+
+            "Passa il telefono";
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+    // ======================================
+    // GIOCATORE PREME PRONTO
+    // ======================================
+
+
+    document
+        .getElementById("iniziaTurno")
+        .onclick = function () {
+
+
+
+            let telefono =
+
+                partita.telefoni[
+                partita.telefonoCorrente
+                ];
+
+
+
+
+            /*
+               QUESTO È IL PUNTO IMPORTANTE:
+        
+               non usiamo chi guarda.
+        
+               Usiamo il telefono.
+            */
+
+
+            document.querySelector(
+                "#schermataFrase h1"
+            )
+                .innerHTML =
+
+                "Il numero è: " +
+                telefono.numero;
+
+
+
+
+            document.getElementById(
+                "testoFrase"
+            )
+                .value = "";
+
+
+
+
+            mostraSchermata(
+                schermataFrase
+            );
+
+
+
+        };
+
+
+
+
+
+
+
+
+
+    // ======================================
+    // SALVA INDIZIO
+    // ======================================
+
+
+    document
+        .getElementById("salvaFrase")
+        .onclick = function () {
+
+
+
+            let frase =
+
+                document.getElementById(
+                    "testoFrase"
+                )
+                    .value
+                    .trim();
+
+
+
+
+            if (frase === "") {
+
+
+                alert(
+                    "Inserisci un indizio"
+                );
+
+
+                return;
+
+            }
+
+
+
+
+
+            let telefono =
+
+                partita.telefoni[
+                partita.telefonoCorrente
+                ];
+
+
+
+            telefono.indizi.push({
+
+                giocatore:
+                    partita.giocatori[
+                    partita.personaCorrente
+                    ],
+
+
+                testo:
+                    frase
+
+            });
+
+
+
+
+
+            // passa alla persona successiva
+
+            partita.personaCorrente++;
+
+
+
+
+            avviaGiroTelefono();
+
+
+
+        };
+    // ======================================
+    // TORNA AL PROPRIETARIO
+    // ======================================
+
+    function chiediNumeroProprietario() {
+
+
+
+        let telefono =
+
+            partita.telefoni[
+            partita.telefonoCorrente
+            ];
+
+
+
+        mostraSchermata(
+            schermataRiepilogo
+        );
+
+
+
+        let lista =
+            document.getElementById(
+                "listaFrasi"
+            );
+
+
+
+        lista.innerHTML = "";
+
+
+
+        telefono.indizi.forEach(
+            (i, index) => {
+
+
+                lista.innerHTML +=
+
+                    `
+        <div class="box">
+
+        Indizio ${index + 1}
+
+        <br><br>
+
+        ${i.testo}
+
+        </div>
+
+        <br>
+
+        `;
+
+
+            });
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+    // ======================================
+    // CONTROLLO NUMERO INSERITO
+    // ======================================
+
+
+    document
+        .getElementById("indovina")
+        .onclick = function () {
+
+
+
+            let tentativo =
+
+                Number(
+                    document.getElementById(
+                        "tentativoNumero"
+                    ).value
+                );
+
+
+
+            let telefono =
+
+                partita.telefoni[
+                partita.telefonoCorrente
+                ];
+
+
+
+            if (
+                tentativo === telefono.numero
+            ) {
+
+
+                alert(
+                    "Numero corretto!"
+                );
+
+
+            } else {
+
+
+                alert(
+                    "Numero sbagliato!"
+                );
+
+
+            }
+
+
+
+
+
+            /*
+               Passa al telefono successivo
+            */
+
+
+            partita.telefonoCorrente++;
+
+
+
+
+            if (
+                partita.telefonoCorrente >=
+                partita.telefoni.length
+            ) {
+
+
+                mostraRisultatoFinale();
+
+
+                return;
+
+            }
+
+
+
+
+            // reset per nuovo telefono
+
+
+            partita.personaCorrente = 0;
+
+
+            partita.telefoni[
+                partita.telefonoCorrente
+            ].indizi = [];
+
+
+
+            mostraSchermata(
+                schermataPassaggio
+            );
+
+
+
+            document.getElementById(
+                "nomeTurno"
+            ).innerHTML =
+
+                "Nuovo telefono";
+
+
+
+        };
+
+
+
+
+
+
+
+
+
+    // ======================================
+    // RISULTATO FINALE
+    // ======================================
+
+
+    function mostraRisultatoFinale() {
+
+
+
+        mostraSchermata(
+            schermataRisultato
+        );
+
+
+
+        document.getElementById(
+            "titoloRisultato"
+        ).innerHTML =
+
+            "Fine partita";
+
+
+
+
+
+        document.getElementById(
+            "numeroCorretto"
+        )
+            .innerHTML =
+
+            "Tutti i telefoni completati";
+
+
+
+
+
+        let lista =
+
+            document.getElementById(
+                "listaImpostori"
+            );
+
+
+
+        lista.innerHTML = "";
+
+
+
+        partita.impostori.forEach(nome => {
+
+
+            lista.innerHTML +=
+
+                `
+        <div class="box">
+
+        ${nome}
+
+        </div>
+
+        `;
+
+
+        });
+
+
+    }
+
+
+
+
+
+
+
+
+
+    // ======================================
+    // RIGIOCA
+    // ======================================
+
+
+    document
+        .getElementById("rigioca")
+        .onclick = function () {
+
+
+
+            partita = {
+
+                giocatori: [],
+
+                mioNome: "",
+
+                telefoni: [],
+
+                impostori: [],
+
+                parola: "",
+
+                minimo: 1,
+
+                massimo: 100,
+
+                telefonoCorrente: 0,
+
+                personaCorrente: 0
+
+            };
+
+
+
+            ruoloGiocatore.innerHTML = "";
+
+
+            carta.classList.remove(
+                "girata"
+            );
+
+
+
+            mostraSchermata(
+                schermataImpostazioni
+            );
+
+
+        };
+
+
+
+
+
+
+
+
+    // ======================================
+    // PARTENZA
+    // ======================================
+
+
+    mostraSchermata(
+        schermataImpostazioni
+    );
+</script>
