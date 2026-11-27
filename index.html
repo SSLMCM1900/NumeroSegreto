@@ -438,7 +438,7 @@
 
 
 
-            <button id="continuaCarta">
+            <button id="continuaCarta" hidden>
 
                 Continua
 
@@ -693,7 +693,7 @@
 
 
 
-    // ================================
+    // ================================NumeroImpostori
     // PARTITA
     // ================================
 
@@ -704,7 +704,7 @@
 
         mioNome: "",
 
-
+        numeroImpostori: numeroImpostoriInput.value,
         // QUI SONO I TELEFONI
         telefoni: [],
 
@@ -883,7 +883,8 @@
     avviaGioco.onclick = function () {
 
 
-
+        continuaCarta.hidden = true;
+        tentativoNumero.value = "";
         let nomi = [];
 
 
@@ -965,7 +966,7 @@
             Number(numeroMassimoInput.value);
 
 
-
+        partita.numeroImpostori = numeroImpostoriInput.value;
 
 
 
@@ -999,6 +1000,13 @@
     function creaTelefoni() {
 
 
+        // ordine fisso alfabetico
+        let nomiOrdinati =
+
+            [...partita.giocatori]
+                .sort();
+
+
 
         let random =
             randomSeme(
@@ -1007,7 +1015,7 @@
                 +
                 "|TELEFONI|"
                 +
-                partita.giocatori.join("|")
+                nomiOrdinati.join("|")
 
             );
 
@@ -1021,7 +1029,7 @@
 
 
 
-        partita.giocatori.forEach(nome => {
+        nomiOrdinati.forEach(nome => {
 
 
             let numero;
@@ -1069,12 +1077,10 @@
             });
 
 
-
         });
 
 
     }
-
 
 
 
@@ -1090,37 +1096,48 @@
     function creaImpostori() {
 
 
+        let nomiOrdinati =
+
+            [...partita.giocatori]
+                .sort();
+
+
 
         let random =
+
             randomSeme(
 
                 partita.parola
                 +
                 "|IMPOSTORI|"
                 +
-                partita.giocatori.join("|")
+                nomiOrdinati.join("|")
 
             );
 
 
 
-        let copia =
-            [...partita.giocatori];
+        let mescolati =
+
+            [...nomiOrdinati];
 
 
 
-        copia.sort(
+        mescolati.sort(
             () => random() - 0.5
         );
 
 
 
         partita.impostori =
-            copia.slice(
-                0,
-                Number(numeroImpostoriInput.value)
-            );
 
+            mescolati.slice(
+                0,
+                partita.numeroImpostori
+            );
+        console.log("giocatori:", partita.giocatori);
+        console.log("numero impostori:", partita.numeroImpostori);
+        console.log("impostori creati:", partita.impostori);
 
     }
     // ======================================
@@ -1152,7 +1169,8 @@
 
 
         }
-
+        continuaCarta.hidden = false;
+        
 
     };
 
@@ -1208,9 +1226,9 @@
 
         let telefono =
 
-            partita.telefoni[
-            partita.telefonoCorrente
-            ];
+            trovaTelefono(
+                partita.mioNome
+            );
 
 
 
@@ -1274,23 +1292,11 @@
         .onclick = function () {
 
 
-
             let telefono =
 
-                partita.telefoni[
-                partita.telefonoCorrente
-                ];
-
-
-
-
-            /*
-               QUESTO È IL PUNTO IMPORTANTE:
-        
-               non usiamo chi guarda.
-        
-               Usiamo il telefono.
-            */
+                trovaTelefono(
+                    partita.mioNome
+                );
 
 
             document.querySelector(
@@ -1298,28 +1304,21 @@
             )
                 .innerHTML =
 
-                "Il numero è: " +
+                "Il numero è: "
+                +
                 telefono.numero;
-
-
 
 
             document.getElementById(
                 "testoFrase"
-            )
-                .value = "";
-
-
+            ).value = "";
 
 
             mostraSchermata(
                 schermataFrase
             );
 
-
-
         };
-
 
 
 
@@ -1368,11 +1367,9 @@
 
             let telefono =
 
-                partita.telefoni[
-                partita.telefonoCorrente
-                ];
-
-
+                trovaTelefono(
+                    partita.mioNome
+                );
 
             telefono.indizi.push({
 
@@ -1413,10 +1410,9 @@
 
         let telefono =
 
-            partita.telefoni[
-            partita.telefonoCorrente
-            ];
-
+            trovaTelefono(
+                partita.mioNome
+            );
 
 
         mostraSchermata(
@@ -1476,7 +1472,7 @@
     // CONTROLLO NUMERO INSERITO
     // ======================================
 
-
+    let mioindice = 0;
     document
         .getElementById("indovina")
         .onclick = function () {
@@ -1495,10 +1491,9 @@
 
             let telefono =
 
-                partita.telefoni[
-                partita.telefonoCorrente
-                ];
-
+                trovaTelefono(
+                    partita.mioNome
+                );
 
 
             if (
@@ -1528,9 +1523,13 @@
             /*
                Passa al telefono successivo
             */
+          
+            mioindice =
 
-
-            partita.telefonoCorrente++;
+                trovaTelefono(
+                    partita.mioNome
+                );
+            partita.telefonoCorrente=partita.telefoni.length;
 
 
 
@@ -1591,15 +1590,12 @@
     // RISULTATO FINALE
     // ======================================
 
-
     function mostraRisultatoFinale() {
-
-
+        
 
         mostraSchermata(
             schermataRisultato
         );
-
 
 
         document.getElementById(
@@ -1610,15 +1606,11 @@
 
 
 
-
-
         document.getElementById(
             "numeroCorretto"
-        )
-            .innerHTML =
+        ).innerHTML =
 
-            "Tutti i telefoni completati";
-
+            mioindice.numero;
 
 
 
@@ -1628,7 +1620,6 @@
             document.getElementById(
                 "listaImpostori"
             );
-
 
 
         lista.innerHTML = "";
@@ -1646,16 +1637,14 @@
         ${nome}
 
         </div>
-
         `;
 
 
         });
 
 
+    
     }
-
-
 
 
 
@@ -1681,6 +1670,7 @@
                 mioNome: "",
 
                 telefoni: [],
+                numeroImpostori: numeroImpostoriInput.value,
 
                 impostori: [],
 
@@ -1713,7 +1703,14 @@
 
 
         };
+    function trovaTelefono(nome) {
 
+        return partita.telefoni.find(
+            telefono =>
+                telefono.proprietario === nome
+        );
+
+    }
 
 
 
